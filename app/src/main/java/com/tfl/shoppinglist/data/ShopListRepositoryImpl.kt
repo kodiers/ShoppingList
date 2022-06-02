@@ -2,7 +2,7 @@ package com.tfl.shoppinglist.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.tfl.shoppinglist.domain.ShopItem
 import com.tfl.shoppinglist.domain.ShopListRepository
 
@@ -36,6 +36,8 @@ class ShopListRepositoryImpl(application: Application): ShopListRepository {
     }
 
     override fun getShopList(): LiveData<List<ShopItem>> {
-        return shopListDao.getShopList()
+        return Transformations.map(shopListDao.getShopList()) {
+            mapper.mapListDbModelToListEntity(it)
+        }
     }
 }
